@@ -64,10 +64,10 @@ isFacingObstacle room (dr, dc) (r, c) =
   let (new_r, new_c) = (r + dr, c + dc)
    in ((room !! new_r) !! new_c) == '#'
 
-walk :: Room -> Direction -> Position -> Set.Set Position -> Set.Set Position
-walk room dir pos visited
+findPath :: Room -> Direction -> Position -> Set.Set Position -> Set.Set Position
+findPath room dir pos visited
   | isFacingBorder room dir pos = Set.insert pos visited
-  | otherwise = walk room new_dir new_pos new_visited
+  | otherwise = findPath room new_dir new_pos new_visited
   where
     new_dir =
       if isFacingObstacle room dir pos
@@ -82,6 +82,6 @@ main = do
   let room = lines input_str
   let guard_pos = findGuard room
   let guard_dir = getGuardDirection room guard_pos
-  let path = walk room guard_dir guard_pos Set.empty
+  let path = findPath room guard_dir guard_pos Set.empty
 
   print $ length path
